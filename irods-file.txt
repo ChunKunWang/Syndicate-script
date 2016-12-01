@@ -1,5 +1,5 @@
+This is an automatically uploaded file for iRODS from the script. 
 
-This is my sample uploaded file for iRODS. Good luck!
-
+Good luck,
 Amos
 
