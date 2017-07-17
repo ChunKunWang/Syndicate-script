@@ -123,4 +123,23 @@ then
 fi
 echo "End of Setup RG"
 
+# PREPARE DropBox-RG
+echo "PREPARE DropBox-RG"
+RG_CONFIG=`cat ./rg-db-config`
+RG_SECRETS=`cat ./rg-db-secrets`
+COMMAND_UPDATE_RG_DB="syndicate update_gateway RG02 driver=./syndicate-core/python/syndicate/rg/drivers/dropbox"
+COMMAND_START_RG_DB="syndicate-rg -u amos@cs.unc.edu -v test-volume -g RG02 -d3"
+
+if [[ `docker inspect -f {{.State.Running}} rg-db` = 'true' ]];
+then
+    COMMAND="echo '$RG_CONFIG' | sudo tee ~/syndicate-core/python/syndicate/rg/drivers/dropbox/config"
+    docker exec -ti rg /bin/bash -c "$COMMAND"
+
+    COMMAND="echo '$RG_SECRETS' | sudo tee ~/syndicate-core/python/syndicate/rg/drivers/dropbox/secrets"
+    docker exec -ti rg /bin/bash -c "$COMMAND"
+    
+    docker exec -ti rg /bin/bash -c "$COMMAND_UPDATE_RG_DB"
+fi
+echo "End of Setup DropBox-RG"
+
 
