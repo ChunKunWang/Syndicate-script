@@ -47,7 +47,7 @@ docker exec -ti ms /bin/bash -c "$COMMAND"
 docker cp ms:/home/syndicate/RG01 .
 docker cp RG01 rg:/home/syndicate/
 
-COMMAND="syndicate export_gateway test-volume ."
+COMMAND="syndicate export_volume test-volume ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
 
 docker cp ms:/home/syndicate/test-volume .
