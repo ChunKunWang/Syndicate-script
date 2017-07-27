@@ -40,16 +40,14 @@ docker exec -ti ms /bin/bash -c "$COMMAND"
 COMMAND="syndicate create_gateway email=$ADMIN_EMAIL volume=test-volume name=RG01 private_key=auto type=RG caps=ALL host=rg"
 docker exec -ti ms /bin/bash -c "$COMMAND"
 
-#Export cert from ms
+#Export cert from ms and copy to rg container
 COMMAND="syndicate export_gateway RG01 ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
-
 docker cp ms:/home/syndicate/RG01 .
 docker cp RG01 rg:/home/syndicate/
 
 COMMAND="syndicate export_volume test-volume ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
-
 docker cp ms:/home/syndicate/test-volume .
 docker cp test-volume rg:/home/syndicate/
 
@@ -60,6 +58,10 @@ docker cp config rg:/home/syndicate/download
 docker cp secrets rg:/home/syndicate/download
 docker cp driver rg:/home/syndicate/download
 
+#Run import command in rg container
+COMMAND="syndicate import_volume test-volume force"
+docker exec -ti rg /bin/bash -c "$COMMAND"
 
-
+COMMAND="syndicate import_gateway RG01 force"
+docker exec -ti rg /bin/bash -c "$COMMAND"
 
