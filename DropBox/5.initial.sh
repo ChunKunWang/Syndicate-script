@@ -46,17 +46,24 @@ docker exec -ti ms /bin/bash -c "$COMMAND"
 docker cp ms:/home/syndicate/RG01 .
 docker cp RG01 rg:/home/syndicate/
 
-#Export cert from ms and copy to rg container
+#Export cert from ms and copy to ag container
 COMMAND="syndicate export_gateway AG01 ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
 docker cp ms:/home/syndicate/AG01 .
 docker cp AG01 ag:/home/syndicate/
+
+#Export cert from ms and copy to ag container
+COMMAND="syndicate export_gateway UG01 ."
+docker exec -ti ms /bin/bash -c "$COMMAND"
+docker cp ms:/home/syndicate/UG01 .
+docker cp UG01 ug:/home/syndicate/
 
 COMMAND="syndicate export_volume test-volume ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
 docker cp ms:/home/syndicate/test-volume .
 docker cp test-volume rg:/home/syndicate/
 docker cp test-volume ag:/home/syndicate/
+docker cp test-volume ug:/home/syndicate/
 
 #Run import command in rg container
 COMMAND="syndicate import_volume test-volume force"
@@ -72,6 +79,12 @@ docker exec -ti ag /bin/bash -c "$COMMAND"
 COMMAND="syndicate import_gateway AG01 force"
 docker exec -ti ag /bin/bash -c "$COMMAND"
 
+#Run import command in ug container
+COMMAND="syndicate import_volume test-volume force"
+docker exec -ti ug /bin/bash -c "$COMMAND"
+
+COMMAND="syndicate import_gateway UG01 force"
+docker exec -ti ug /bin/bash -c "$COMMAND"
 
 # PREPARE RG: local
 echo "PREPARE RG-Local"
@@ -95,7 +108,7 @@ echo "End of Setup RG-Local"
 # PREPARE iRODS-AG
 echo "PREPARE AG-iRODS"
 #Setup disk RG driver
-#Src: 
+#Src: https://github.com/syndicate-storage/syndicate-fs-driver/tree/master/src/sgfsdriver/ag_driver 
 docker exec -ti ag /bin/bash -c "mkdir download"
 docker cp ./ag-driver/config ag:/home/syndicate/download
 docker cp ./ag-driver/secrets ag:/home/syndicate/download
