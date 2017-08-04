@@ -12,6 +12,7 @@ cd /home/amos/Syndicate-script/DropBox
 docker cp $ADMIN_CERTS ms:/home/syndicate/
 docker cp $ADMIN_CERTS ag:/home/syndicate/
 docker cp $ADMIN_CERTS rg:/home/syndicate/
+docker cp $ADMIN_CERTS rg-db:/home/syndicate/
 docker cp $ADMIN_CERTS ug:/home/syndicate/
 
 # Register syndicate tool
@@ -23,6 +24,9 @@ docker exec -ti ag /bin/bash -c "$COMMAND"
 
 COMMAND="yes y | syndicate setup $ADMIN_EMAIL $ADMIN_PEM http://172.27.0.10:8080"
 docker exec -ti rg /bin/bash -c "$COMMAND"
+
+COMMAND="yes y | syndicate setup $ADMIN_EMAIL $ADMIN_PEM http://172.27.0.10:8080"
+docker exec -ti rg-db /bin/bash -c "$COMMAND"
 
 COMMAND="yes y | syndicate setup $ADMIN_EMAIL $ADMIN_PEM http://172.27.0.10:8080"
 docker exec -ti ug /bin/bash -c "$COMMAND"
@@ -40,11 +44,20 @@ docker exec -ti ms /bin/bash -c "$COMMAND"
 COMMAND="syndicate create_gateway email=$ADMIN_EMAIL volume=test-volume name=RG01 private_key=auto type=RG caps=ALL host=rg"
 docker exec -ti ms /bin/bash -c "$COMMAND"
 
+COMMAND="syndicate create_gateway email=$ADMIN_EMAIL volume=test-volume name=RG02 private_key=auto type=RG caps=ALL host=rg-db"
+docker exec -ti ms /bin/bash -c "$COMMAND"
+
 #Export cert from ms and copy to rg container
 COMMAND="syndicate export_gateway RG01 ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
 docker cp ms:/home/syndicate/RG01 .
 docker cp RG01 rg:/home/syndicate/
+
+#Export cert from ms and copy to rg-db container
+COMMAND="syndicate export_gateway RG02 ."
+docker exec -ti ms /bin/bash -c "$COMMAND"
+docker cp ms:/home/syndicate/RG02 .
+docker cp RG02 rg-db:/home/syndicate/
 
 #Export cert from ms and copy to ag container
 COMMAND="syndicate export_gateway AG01 ."
@@ -62,6 +75,7 @@ COMMAND="syndicate export_volume test-volume ."
 docker exec -ti ms /bin/bash -c "$COMMAND"
 docker cp ms:/home/syndicate/test-volume .
 docker cp test-volume rg:/home/syndicate/
+docker cp test-volume rg-db:/home/syndicate/
 docker cp test-volume ag:/home/syndicate/
 docker cp test-volume ug:/home/syndicate/
 
@@ -71,6 +85,13 @@ docker exec -ti rg /bin/bash -c "$COMMAND"
 
 COMMAND="syndicate import_gateway RG01 force"
 docker exec -ti rg /bin/bash -c "$COMMAND"
+
+#Run import command in rg-db container
+COMMAND="syndicate import_volume test-volume force"
+docker exec -ti rg-db /bin/bash -c "$COMMAND"
+
+COMMAND="syndicate import_gateway RG02 force"
+docker exec -ti rg-db /bin/bash -c "$COMMAND"
 
 #Run import command in ag container
 COMMAND="syndicate import_volume test-volume force"

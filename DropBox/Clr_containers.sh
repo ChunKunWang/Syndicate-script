@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker stop ms irods ug ag rg 
+docker stop ms irods ug ag rg rg-db
 
 if [[ `docker inspect -f {{.State.Running}} ms` = 'false' ]];
 then
@@ -25,6 +25,11 @@ fi
 if [[ `docker inspect -f {{.State.Running}} rg` = 'false' ]];
 then
     docker rm rg
+fi
+
+if [[ `docker inspect -f {{.State.Running}} rg-db` = 'false' ]];
+then
+    docker rm rg-db
 fi
 
 docker network rm syndicate-docker
