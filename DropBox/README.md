@@ -3,8 +3,12 @@ Script to setup a demo for Syndicate and the development of Dropbox
 Source code:
 
 https://github.com/syndicate-storage/syndicate-fs-driver
+
 https://github.com/syndicate-storage/syndicate-docker
+
 https://github.com/syndicate-storage/syndicate-core
+
+
 Environment requirment: Ubuntu 14.04
 
 Description of files:
