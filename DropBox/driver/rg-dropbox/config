@@ -1,0 +1,8 @@
+{
+   "STORAGE_DIR":       "isyndicate",
+   "BLOCK_REPLICATION": false,
+   "EXEC_FMT":          "/usr/bin/env python -m syndicate.rg.gateway",
+   "DRIVER":            "syndicate.rg.drivers.fs",
+   "DRIVER_FS_PLUGIN":  "dropbox",
+   "DRIVER_FS_PLUGIN_CONFIG": {}                     
+}
