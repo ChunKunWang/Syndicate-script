@@ -14,7 +14,8 @@ docker exec -ti rg-db /bin/bash -c "$COMMAND"
 COMMAND="git clone https://github.com/ChunKunWang/syndicate-fs-driver.git"
 docker exec -ti rg-db /bin/bash -c "$COMMAND"
 
-COMMAND="sudo pip install dropbox"
+#COMMAND="sudo pip install dropbox"
+COMMAND="sudo apt-get install python-dropbox"
 docker exec -ti rg-db /bin/bash -c "$COMMAND"
 
 COMMAND="sudo apt-get -y remove syndicate-fs-driver"
